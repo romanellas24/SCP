@@ -6,7 +6,15 @@ import project.utils.{Clock, Printer};
 object First extends App {
   private val clock = new Clock()
   println("Hello! Scala is working")
-  private val spark = SparkSession.builder().appName("Hello").master("local[*]").getOrCreate()
+  private val spark = SparkSession
+    .builder()
+    .appName("Hello")
+    .master("local[*]")
+    .config("spark.executor.memory", "16g")
+    .config("spark.driver.memory", "16g")
+    .config("spark.memory.offHeap.size", "16g")
+    .getOrCreate()
+
   println("Spark is running!")
   //private val rdd = spark.read.csv("./data/order_products.csv").rdd
   //private val rdd = spark.read.csv("./data/small.csv").rdd
