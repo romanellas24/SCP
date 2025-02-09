@@ -22,7 +22,7 @@ object First extends App {
   //private val rdd = spark.read.csv("./data/small.csv").rdd
   //private val rdd = spark.read.csv("./data/order_products.csv").rdd
   //private val rdd = spark.read.csv("./data/quarter.csv").rdd
-  private val rdd = spark.read.csv("gs://order-dataset/data/small.csv").rdd
+  private val rdd = spark.read.csv("gs://order-dataset/data/order_products.csv").rdd
 
 
   //Given an RDD[String] We'll parse all as (O, P) Where, O is the order and P is the product
@@ -61,6 +61,7 @@ object First extends App {
     (x, y, e._2.size)
   })
 
-  new Printer().saveOutput(result.collect().toList, "gs://order-dataset/data/out-first.csv")
+  val df = spark.createDataFrame(result)
+  df.write.format("csv").option("path", "gs://order-dataset/out/out-first.csv").save()
   clock.printElapsedTime()
 }
