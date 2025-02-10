@@ -14,7 +14,7 @@ libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.5.4"
 lazy val root = (project in file("."))
   .settings(
     name := "SCP",
-    assembly / mainClass := Some("project.First"),
+    assembly / mainClass := Some("project.Second"),
     assemblyMergeStrategy in assembly := {
       case PathList("META-INF","services",xs @ _*) => MergeStrategy.filterDistinctLines // Added this
       case PathList("META-INF",xs @ _*) => MergeStrategy.discard
@@ -24,7 +24,7 @@ lazy val root = (project in file("."))
 
 lazy val app = (project in file("app"))
   .settings(
-    assembly / mainClass := Some("project.First"),
+    assembly / mainClass := Some("project.Second"),
     assemblyMergeStrategy in assembly := {
       case PathList("META-INF","services",xs @ _*) => MergeStrategy.filterDistinctLines // Added this
       case PathList("META-INF",xs @ _*) => MergeStrategy.discard

@@ -8,7 +8,7 @@ object First extends App {
   println("Hello! Scala is working")
   private val spark = SparkSession
     .builder()
-    .appName("Hello")
+    .appName("SCP")
     .master("local[*]")
     .config("spark.executor.memory", "128g")
     .config("spark.driver.memory", "128g")
@@ -22,7 +22,8 @@ object First extends App {
   //private val rdd = spark.read.csv("./data/small.csv").rdd
   //private val rdd = spark.read.csv("./data/order_products.csv").rdd
   //private val rdd = spark.read.csv("./data/quarter.csv").rdd
-  private val rdd = spark.read.csv("gs://order-dataset/data/order_products.csv").rdd
+  private val rddRead = spark.read.csv("gs://order-dataset/data/order_products.csv").rdd
+  private val rdd = rddRead.repartition(200)
 
 
   //Given an RDD[String] We'll parse all as (O, P) Where, O is the order and P is the product
