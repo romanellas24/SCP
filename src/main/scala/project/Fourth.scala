@@ -12,21 +12,14 @@ object Fourth extends App {
   private val spark = SparkSession
     .builder()
     .appName("SCP") //TODO: RECOMMENT BELLOW
-    /*
     .master("local[*]")
-    .config("spark.executor.memory", "4G")
-    .config("spark.driver.memory", "4G")
-    .config("spark.driver.maxResultSize", "4G")
-    .config("spark.memory.offHeap.enabled", true)
-    .config("spark.memory.offHeap.size", "4G")
-     */
     .getOrCreate()
   println("Spark is running!")
   private val filename = args.apply(0)
   //private val rdd = spark.read.csv("./data/order_products.csv").rdd
-  //private val rdd = spark.read.csv("./data/medium.csv").rdd
+  private val rdd = spark.read.csv("./data/medium.csv").rdd
   //private val rdd = spark.read.csv("./data/small.csv").rdd
-  private val rdd = spark.read.csv("gs://order-dataset/data/" + filename).rdd
+  //private val rdd = spark.read.csv("gs://order-dataset/data/" + filename).rdd
 
   //Given an RDD[String] We'll parse all as (O, P) Where, O is the order and P is the product
   private val orderProductPair = rdd.map(e => {
@@ -51,9 +44,9 @@ object Fourth extends App {
     (x, y, e._2.size)
   })
 
-  //println(test.collect().toList)
-  val df = spark.createDataFrame(test).repartition(1)
-  df.write.format("csv").option("path", "gs://order-dataset/out/out-fourth-" + filename).save()
+  println(test.collect().toList)
+  //val df = spark.createDataFrame(test).repartition(1)
+  //df.write.format("csv").option("path", "gs://order-dataset/out/out-fourth-" + filename).save()
   //df.write.format("csv").option("path", "out.csv").save()
-  //clock.printElapsedTime()
+  clock.printElapsedTime()
 }
