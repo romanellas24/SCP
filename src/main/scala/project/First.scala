@@ -1,6 +1,7 @@
 package project
 
 import org.apache.spark.sql.SparkSession
+import project.Fourth.{args, spark, test}
 import project.utils.{Clock, Printer};
 
 object First extends App {
@@ -24,7 +25,8 @@ object First extends App {
   //private val rdd = spark.read.csv("./data/small.csv").rdd
   //private val rdd = spark.read.csv("./data/order_products.csv").rdd
   //private val rdd = spark.read.csv("./data/quarter.csv").rdd
-  private val rdd = spark.read.csv("gs://order-dataset/data/order_products.csv").rdd
+  private val filename = args.apply(0)
+  private val rdd = spark.read.csv("gs://order-dataset/data/" + filename).rdd
   //private val rdd = rddRead.repartition(200)
 
 
@@ -64,7 +66,9 @@ object First extends App {
     (x, y, e._2.size)
   })
 
-  val df = spark.createDataFrame(result)
-  df.write.format("csv").option("path", "gs://order-dataset/out/out-first.csv").save()
+  //val df = spark.createDataFrame(result)
+  //df.write.format("csv").option("path", "gs://order-dataset/out/out-first.csv").save()
+  val df = spark.createDataFrame(result).repartition(1)
+  df.write.format("csv").option("path", "gs://order-dataset/out/out-first-" + filename).save()
   clock.printElapsedTime()
 }
